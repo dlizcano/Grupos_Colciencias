@@ -49,7 +49,7 @@ names(fulltable2)<-c("Codigo", "NombreGrupo",
                     "Área1",	"Programa1", "Programa2", 
                     "institucion","integrantes")
 # split depto and city
-dept_city<-colsplit(fulltable2$Departamento_Ciudad, split = "\\ - ", names = c('Departamento', 'Cuidad'))
+dept_city<-colsplit(fulltable2$Departamento_Ciudad, split = "\\ - ", names = c('Departamento', 'Ciudad'))
 # delete Departamento_Ciudad
 fulltable2<-fulltable2[,-8]
 # paste dept_city
@@ -76,6 +76,8 @@ for(i in 1:length(nombres_apellidos$Nombre1)){
   if(nombres_apellidos$Nombre2[i]=="") {nombres_apellidos$Nombre2[i]<-"NA"}
   # nombres_apellidos$generoscore2[i]<-xpathSApply(htmlParse(nombres_apellidos$generoscore[i]), "//p",xmlValue)
 }
+
+
 # make url
 nombres_apellidos$generoscore<-as.character(paste("http://api.onomatic.com/onomastics/api/gendre", nombres_apellidos$Nombre1, nombres_apellidos$Nombre2, sep="/"))
 
@@ -95,6 +97,15 @@ Genero<-nombres_apellidos$genero
 fulltable2<-cbind(fulltable2,Genero)
 # some cleaning 
 fulltable2<-fulltable2[,-c(25,24,23,22,8,1)]
+
+
+
+# chk consistancy and fill blanks <- NA
+for(i in 1:length(nombres_apellidos$Nombre1)){
+  if(fulltable2$Área1[i]=="") {fulltable2$Área1[i]<-"NA"}
+  # nombres_apellidos$generoscore2[i]<-xpathSApply(htmlParse(nombres_apellidos$generoscore[i]), "//p",xmlValue)
+}
+
 
 #### save
 write.csv(fulltable2, file="C:\\Users\\Diego\\Documents\\CodigoR\\blog\\Colciencias\\data\\fulltable3.csv")
